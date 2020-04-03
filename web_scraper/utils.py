@@ -1,45 +1,46 @@
 import os
 import re
 import urllib
+from collections import Counter
 from pathlib import Path
+from typing import List
 
 import pymorphy2
 import requests
 from bs4 import BeautifulSoup
-from collections import Counter
 
-def do_request(link: str):
+
+def do_request(link: str) -> BeautifulSoup:
     try:
         page = requests.get(link)
     except requests.exceptions.ConnectionError:
         raise ConnectionError
     data = page.text
-    soup = BeautifulSoup(data, features="html5lib")
+    soup = BeautifulSoup(data, features='html5lib')
     return soup
 
 
-def download_images(images, path):
+def download_images(images: List[str], path: Path) -> None:
     try:
         for image in images:
             urllib.request.urlretrieve(image, path / os.path.basename(image))
-    except Exception as e:
+    except urllib.error.URLError as e:
         raise e
 
 
-def make_dir_article(article_name, article_text, article_images):
+def make_dir_with_article(article_name: str, article_text: str) -> Path:
     path = Path.cwd() / article_name
     Path.mkdir(path)
-    # download_images(article_images, path)
     with open(path / '{0}.txt'.format(article_name), 'w') as f:
         f.write(article_text)
     return path
 
 
-def validate_arguments(articles_count, threads_count):
+def validate_arguments(articles_count: int, threads_count: int) -> bool:
     return articles_count > 0 and threads_count > 0
 
 
-def calculate_words(text: str):
+def extract_words(text: str) -> List[str]:
     words = re.findall(r'\w+', text.lower())
     morph = pymorphy2.MorphAnalyzer()
     needed_words = []
@@ -51,11 +52,11 @@ def calculate_words(text: str):
     return needed_words
 
 
-def create_count_words_file(words):
+def create_count_words_file(words: List[str]) -> None:
     with open('1000 most common words.txt', 'w') as f:
         counter = Counter(words)
         sorted_counter = Counter(
-            {k: v for k, v in sorted(counter.items(), key=lambda pair: pair[1])}
+            {v: k for k, v in sorted(counter.items(), key=lambda pair: pair[1])}
         ).most_common(1000)
         for item in sorted_counter:
             f.write('{0} - {1}'.format(item[0], item[1]) + '\n')

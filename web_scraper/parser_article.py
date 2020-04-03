@@ -1,17 +1,19 @@
 import re
+from typing import List, Tuple
 
-from web_scraper.utils import do_request
+from bs4 import BeautifulSoup
 
 
 class ArticleParser:
-    def __init__(self, article_name, article_url):
+    def __init__(self, article_name: str, article_url: str, soup: BeautifulSoup):
         self.article_name = article_name
         self.article_url = article_url
-        self.soup = do_request(self.article_url)
-        self.text = []
-        self.images = []
+        # self.soup = do_request(self.article_url)
+        self.soup = soup
+        self.text = ''
+        self.images: List[str] = []
 
-    def find_text_and_images(self):
+    def find_text_and_images(self) -> Tuple[str, List[str]]:
         text = self.soup.findAll(
             'div', {'class': 'post__text post__text-html post__text_v1'}
         )
