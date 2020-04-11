@@ -19,6 +19,10 @@ def test_init_article_parser(article_parser):
 
 
 def test_find_text_and_images(article_parser):
-    actual_text, actual_images = article_parser.find_text_and_images()
+    actual_text = article_parser.find_text()
     assert actual_text is not None
+
+
+def test_find_images(article_parser):
+    actual_images = article_parser.find_images()
     assert actual_images is not None

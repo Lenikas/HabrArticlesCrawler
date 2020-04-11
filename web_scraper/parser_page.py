@@ -6,7 +6,6 @@ from bs4 import BeautifulSoup
 class PageParser:
     def __init__(self, page_url: str, soup: BeautifulSoup):
         self.page = page_url
-        # self.soup = do_request(self.page)
         self.soup = soup
         self.articles: Dict[str, str] = {}
         self.next_page = ''
@@ -25,5 +24,7 @@ class PageParser:
         button_url = next_button[0].get('href')
         if button_url[0:5] != 'https':
             self.next_page = 'https://habr.com' + button_url
-        self.next_page = button_url
+        else:
+            self.next_page = button_url
+        print(self.next_page)
         return self.next_page

@@ -13,8 +13,8 @@ from bs4 import BeautifulSoup
 def do_request(link: str) -> BeautifulSoup:
     try:
         page = requests.get(link)
-    except requests.exceptions.ConnectionError:
-        raise ConnectionError
+    except requests.exceptions.ConnectionError as e:
+        raise ConnectionError from e
     data = page.text
     soup = BeautifulSoup(data, features='html5lib')
     return soup
@@ -59,4 +59,4 @@ def create_count_words_file(words: List[str]) -> None:
             {v: k for k, v in sorted(counter.items(), key=lambda pair: pair[1])}
         ).most_common(1000)
         for item in sorted_counter:
-            f.write('{0} - {1}'.format(item[0], item[1]) + '\n')
+            f.write(f'{item[1]} - {item[0]} \n')

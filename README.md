@@ -11,8 +11,8 @@
     which are saved to a file after the script is running.
 
 ### Run Scraper:
-    python --startscraper https://habr.com/ {articles count} {threads count}
-    python app.py --startscraper https://habr.com/ 10 10
+    python --startscraper https://habr.com/ru/all/ {articles count} {threads count}
+    python app.py --startscraper https://habr.com/ru/all/ 10 10
 
 ### Create venv:
     make venv

@@ -1,4 +1,5 @@
 from web_scraper.start import start_scraper
+from web_scraper.utils import validate_arguments
 import argparse
 
 
@@ -19,12 +20,13 @@ def main():
         try:
             articles_count = int(args.startscraper[1])
             threads_count = int(args.startscraper[2])
+            if not validate_arguments(articles_count, threads_count):
+                raise ValueError
         except ValueError:
             raise ValueError('Articles and threads count must be a number above zero')
         start_scraper(start_link, articles_count, threads_count)
-    else:
-        raise SyntaxError('usage: main_console.py [-h] [--startscraper]')
 
 
 if __name__ == "__main__":
     main()
+
